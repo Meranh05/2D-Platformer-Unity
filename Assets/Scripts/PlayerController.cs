@@ -40,15 +40,16 @@ public class PlayerController : MonoBehaviour
 
     public float fireRate = 0.5f; // Time between each shot
     private float nextFireTime = 0f; // Time of the next allowed shot
-
-
-    
+    //Audio
+    public AudioSource audioSource;
+    public AudioClip jumpSound;
 
 
 
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         footEmissions = footsteps.emission;
 
@@ -165,12 +166,13 @@ public class PlayerController : MonoBehaviour
        
 
 
-        rb.velocity = new Vector2(moveX * moveSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(moveX * moveSpeed, rb.linearVelocity.y);
     }
 
     private void Jump(float jumpForce)
     {
-        rb.velocity = new Vector2(rb.velocity.x, 0); // Zero out vertical velocity
+        audioSource.PlayOneShot(jumpSound);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // Zero out vertical velocity
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         playeranim.SetTrigger("jump");
     }
